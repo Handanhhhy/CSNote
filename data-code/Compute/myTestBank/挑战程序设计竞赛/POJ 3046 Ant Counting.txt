@@ -1,0 +1,32 @@
+package Compute;
+
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		final int mod = 1000000;
+		int t = input.nextInt(), a = input.nextInt(), s = input.nextInt(), b = input.nextInt();
+		int array[] = new int[t + 1];
+		for (int i = 0; i < a; i++)
+			++array[input.nextInt()];
+		int dp[][] = new int[t + 1][b + 1];
+		for (int i = 0; i <= t; i++)
+			dp[i][0] = 1;
+		for (int i = 1; i <= t; i++) {
+			for (int j = 1; j <= b; j++) {
+				if (j - 1 - array[i] >= 0)
+					dp[i][j] = (dp[i][j - 1] + dp[i - 1][j] - dp[i - 1][j - 1 - array[i]] + mod) % mod;
+				else
+					dp[i][j] = (dp[i][j - 1] + dp[i - 1][j]) % mod;
+			}
+		}
+		int ans = 0;
+		for (int i = s; i <= b; i++) {
+			ans += dp[t][i];
+			if (ans >= mod)
+				ans -= mod;
+		}
+		System.out.print(ans);
+	}
+}

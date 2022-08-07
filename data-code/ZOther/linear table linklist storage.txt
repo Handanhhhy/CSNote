@@ -1,0 +1,120 @@
+/*
+	线性表的链式存储结构
+*/
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>//修改链表数据的date   char型
+#define MaxSize 15//整型和字符型的大小不一样 可以修改
+typedef char ElemType;//修改ElemType时要修改获取和输出的数据类型及是否需要取地址
+					//以及函数的形参类型
+typedef struct _List
+{
+	ElemType data[MaxSize + 1];
+	struct _list *next;
+}List;
+List* Createlist(List *head);
+List* Insert(List *head,ElemType *insert,int site);
+List* Delete(List *head, int delsite);
+void Print(List *head);
+void Free(List *head);
+int main()
+{
+	//system("mode con cols=50 lines=30");
+	List *head = (List*)malloc(sizeof(List));
+	Createlist(head);
+
+	printf("请输入插入(取代)的位置:");
+	int site;
+	scanf("%d", &site);
+	char insert[MaxSize + 1];
+	printf("请输入插入的数据:");
+	scanf("%s", insert);
+	Insert(head, insert, site);
+
+	printf("请输入删除的位置:");
+	int delsite;
+	scanf("%d", &delsite);
+	Delete(head, delsite);
+
+	Print(head);
+	Free(head);
+	system("pause");
+	return 0;
+}
+List* Createlist(List *head)
+{
+	int i = 0;
+	char is_stop = 0;
+	List *p = NULL, *tail = NULL;
+	do
+	{
+		tail = (List*)malloc(sizeof(List));
+		tail->next = NULL;
+		printf("请输入第%d数据:",i+1);
+		i++;
+		scanf("%s", tail->data);
+		if (p == NULL)
+		{
+			p = tail;
+			head->next = p;
+		}
+		else
+		{
+			p->next = tail;
+			p = tail;			
+		}
+		printf("按S键结束输入,任意键继续");
+		is_stop = getch(); getch();
+		is_stop = tolower(is_stop);
+		printf("\n");
+	} while (is_stop!='s');
+	return head;
+}
+List* Insert(List *head, ElemType *insert, int site)
+{
+	List *ip = (List*)malloc(sizeof(List));
+	List *seek = head;
+	strcpy(ip->data, insert);
+	int i = 1;
+	while (i <site && seek->next != NULL)
+	{
+		seek = seek->next;//seek++与seek=seek->next不等价
+		i++;
+	}
+	ip->next = seek->next;
+	seek->next = ip;
+	return head;
+}
+List* Delete(List *head, int delsite)
+{
+	List *seek = head, *dp;
+	int i = 1;
+	while (i < delsite)
+	{
+		seek = seek->next;
+		i++;
+	}
+	dp = seek->next;//注意dp = seek->next;与dp->next=seek->next;的区别
+	seek->next = dp->next;
+	free(dp);
+	return head;
+}
+void Print(List *head)
+{
+	List* temp = head->next;
+	for (; temp!= NULL; temp=temp->next)
+	{
+		printf("%s\n", temp->data);
+	}
+}
+void Free(List *head)
+{
+	List *temp = head, *Cp;
+	for (Cp = temp->next; Cp->next != NULL; Cp = Cp->next)//注意是Cp->next != NULL
+	{													  //因为Cp不会=NULL它有指向
+		free(temp);
+		temp = Cp;
+	}
+	free(temp);
+	free(Cp);//
+}

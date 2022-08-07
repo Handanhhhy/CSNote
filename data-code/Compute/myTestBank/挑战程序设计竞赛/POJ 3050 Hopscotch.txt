@@ -1,0 +1,53 @@
+package Compute;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StreamTokenizer;
+import java.util.Set;
+import java.util.TreeSet;
+
+class Solution {
+	StreamTokenizer in = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
+	PrintWriter out = new PrintWriter(new OutputStreamWriter(System.out));
+	int[][] map = new int[5][5], dir = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+	Set<Integer> set = new TreeSet<Integer>();
+
+	public Solution() throws IOException {
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 5; j++) {
+				in.nextToken();
+				int n = (int) in.nval;
+				map[i][j] = n;
+			}
+		}
+		for (int i = 0; i < 5; i++)
+			for (int j = 0; j < 5; j++)
+				dfs(1, 0, i, j);
+		out.print(set.size());
+		out.flush();
+
+	}
+
+	public void dfs(int step, int num, int x, int y) {
+		if (step > 6) {
+			set.add(num);
+			return;
+		}
+		for (int k = 0; k < 4; k++) {
+			int i = x + dir[k][0], j = y + dir[k][1];
+			if (i < 0 || j < 0 || i >= 5 || j >= 5)
+				continue;
+			dfs(step + 1, num * 10 + map[i][j], i, j);
+		}
+	}
+
+}
+
+public class Main {
+	public static void main(String[] args) throws IOException {
+		Solution s = new Solution();
+	}
+}

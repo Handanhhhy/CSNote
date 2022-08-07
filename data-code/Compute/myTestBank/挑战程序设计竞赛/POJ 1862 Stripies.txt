@@ -1,0 +1,29 @@
+package Compute;
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int n = input.nextInt();
+		Queue<Double> queue = new PriorityQueue<Double>(n, new Comparator<Double>() {
+			@Override
+			public int compare(Double o1, Double o2) {
+				return o1 < o2 ? 1 : -1;
+			}
+		});
+		for (int i = 0; i < n; i++)
+			queue.offer(input.nextDouble());
+
+		while (queue.size() >= 2) {
+			double m1 = queue.poll();
+			double m2 = queue.poll();
+			double res = 2 * Math.sqrt(m1 * m2);
+			queue.offer(res);
+		}
+		System.out.printf("%.3f", queue.poll());
+	}
+}

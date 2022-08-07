@@ -1,0 +1,36 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		final int N = 200000, offset = 100000;
+		Scanner input = new Scanner(System.in);
+		int n = input.nextInt();
+		int[] s = new int[n + 1], f = new int[n + 1];
+		int[] dp = new int[N + 5];
+		for (int i = 0; i < n; i++) {
+			s[i] = input.nextInt();
+			f[i] = input.nextInt();
+		}
+		Arrays.fill(dp, -N);// 满足恰好 不能为 Integer.MIN_VALUE(两个最小负数相加爆掉)
+		dp[offset] = 0;
+		for (int i = 0; i < n; i++) {
+			if (f[i] >= 0) {
+				for (int j = N; j >= f[i]; j--) {// 限制为负也要选 只是不能越界 正数 ←
+					dp[j] = Math.max(dp[j], dp[j - f[i]] + s[i]);
+				}
+			} else {
+				for (int j = 0; j <= f[i] + N; j++) {// 同理 负数 → 
+					dp[j] = Math.max(dp[j], dp[j - f[i]] + s[i]);
+				}
+			}
+		}
+		int ans = 0;
+		for (int j = offset; j <= N; j++)
+			if (dp[j] >= 0)
+				ans = Math.max(ans, dp[j] + j - offset);
+		System.out.print(ans);
+	}
+}

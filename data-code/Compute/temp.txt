@@ -1,0 +1,5 @@
+https://services.gradle.org/distributions/gradle-5.4.1-all.zip
+com.demo.music
+sqlplus kyrenexf/123@202.115.82.8@pdborcl
+http://202.115.82.8:1522
+

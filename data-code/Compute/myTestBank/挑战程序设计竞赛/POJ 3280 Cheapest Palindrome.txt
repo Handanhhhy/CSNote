@@ -1,0 +1,35 @@
+package Compute;
+
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int n = input.nextInt(), m = input.nextInt();
+		input.nextLine();
+		String string = input.nextLine();
+		char[] str = string.toCharArray();
+		int cost[] = new int[26];
+		int dp[][] = new int[m][m];
+		for (int i = 0; i < n; i++) {
+			char temp = input.next().charAt(0);
+			int ins = input.nextInt();
+			int del = input.nextInt();
+			cost[temp - 'a'] = Math.min(ins, del);
+			input.nextLine();
+		}
+		for (int k = 1; k < m; k++) {// 区间
+			for (int i = 0, j = k; j < m; i++, j++) {
+				dp[i][j] = Integer.MAX_VALUE;
+				if (str[i] == str[j])
+					dp[i][j] = dp[i + 1][j - 1];
+				else {
+					dp[i][j] = Math.min(dp[i][j], dp[i + 1][j] + cost[str[i] - 'a']);// 若str[i+1][j]为回文取在首删除i或者在尾添加i中min
+					dp[i][j] = Math.min(dp[i][j], dp[i][j - 1] + cost[str[j] - 'a']);// 若str[i][j-1]为回文取在首添加j或者在尾删除j中min
+				}
+			}
+		}
+		System.out.print(dp[0][m - 1]);
+	}
+
+}

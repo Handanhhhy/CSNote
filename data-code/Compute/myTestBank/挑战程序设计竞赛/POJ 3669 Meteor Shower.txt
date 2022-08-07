@@ -1,0 +1,84 @@
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+class meteor {
+	public int x, y, t;
+
+	public meteor(int x, int y, int t) {
+		this.x = x;
+		this.y = y;
+		this.t = t;
+	}
+}
+//袭击位置1-300 但是可以逃离的位置不止300 302满足
+class Solution {
+	final int MAX_X = 310, MAX_Y = 310, INF = 1001;
+	int len, lastTime;
+	int[][] dir = { { 0, 0 }, { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+	meteor a[];
+	int map[][] = new int[MAX_Y + 1][MAX_X + 1];
+	boolean book[][] = new boolean[MAX_Y + 1][MAX_X + 1];
+
+	public Solution(meteor[] list, int length) {
+		a = list;
+		len = length;
+		Arrays.sort(a, new Comparator<meteor>() {
+			@Override
+			public int compare(meteor o1, meteor o2) {
+				return o2.t - o1.t;
+			}
+		});
+		lastTime = a[0].t;// 记录最后一次袭击时间
+		for (int i = 0; i <= MAX_Y; i++)
+			Arrays.fill(map[i], INF);
+		for (int i = 0; i < len; i++) {
+			for (int j = 0; j < 5; j++) {
+				int x = a[i].x + dir[j][0], y = a[i].y + dir[j][1];
+				if (x < 0 || y < 0 || x > MAX_X || y > MAX_Y)
+					continue;
+				map[y][x] = a[i].t;
+			}
+		}
+		if (map[0][0] == 0)
+			System.out.print(-1);
+		else
+			System.out.print(bfs());
+	}
+
+	public int bfs() {
+		Queue<meteor> queue = new LinkedList<meteor>();
+		queue.offer(new meteor(0, 0, 0));
+		book[0][0] = true;
+		while (!queue.isEmpty()) {
+			meteor cur = queue.poll();
+			if (map[cur.y][cur.x] == INF)
+				return cur.t;
+			for (int i = 1; i < 5; i++) {
+				int x = cur.x + dir[i][0], y = cur.y + dir[i][1], t = cur.t + 1;
+				if (x < 0 || y < 0 || x > MAX_X || y > MAX_Y || book[y][x] || map[y][x] <= t)
+					continue;
+				book[y][x] = true;
+				queue.offer(new meteor(x, y, t));
+
+			}
+		}
+		return -1;
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner inputScanner = new Scanner(System.in);
+		int n = inputScanner.nextInt();
+		meteor[] m = new meteor[n];
+		for (int i = 0; i < n; i++) {
+			int x = inputScanner.nextInt(), y = inputScanner.nextInt(), t = inputScanner.nextInt();
+			m[i] = new meteor(x, y, t);
+		}
+		Solution s = new Solution(m, n);
+	}
+}

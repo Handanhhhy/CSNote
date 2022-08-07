@@ -1,0 +1,73 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+class Solution {
+	int[] a;
+	int len, k;
+
+	public boolean C(int time) {
+		long alltime = 0;
+		for (int i = 0; i < len; i++) {
+			int use = a[i] - time;
+			if (use > 0) {
+				alltime += (use + k - 1) / k;
+				if (alltime > time)
+					return false;
+			}
+		}
+		return true;
+	}
+
+	public void slove(int[] a, int len, int k) {
+		this.a = a;
+		this.len = len;
+		this.k = k;
+		int up = a[len - 1], lb = 1;
+		while (up - lb > 1) {
+			int mid = (up + lb) >> 1;
+			if (C(mid)) {
+				up = mid;
+			} else {
+				lb = mid;
+			}
+		}
+		System.out.print(up);
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int N = input.nextInt();
+		int[] a = new int[N];
+		for (int i = 0; i < N; i++)
+			a[i] = input.nextInt();
+		int k = input.nextInt() - 1;
+		Arrays.sort(a);
+		Solution s = new Solution();
+		if (k == 0)
+			System.out.print(a[N - 1]);
+		else
+			s.slove(a, N, k);
+	}
+
+}
+=====================================================================
+这样写错误的原因就是:可以交换着烤比如说烤a两分钟再考b，然后再考a这样
+测试点:input 2 8 9 2 output:6就是这个原因
+public boolean C(int time) {
+		int wait = 0, alltime = time;
+		for (int i = 0; i < len; i++) {
+			if (a[i] > time) {
+				int need = a[i] - wait;
+				int use = (need + k - 1 / k);
+				wait += use;
+				alltime -= use;
+				if (alltime < 0)
+					return false;
+			}
+		}
+		return true;
+	}

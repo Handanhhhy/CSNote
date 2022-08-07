@@ -1,0 +1,270 @@
+#include<iostream>
+using namespace std;
+//intput 2 123456789
+int main() {
+	int k;
+	char str[255];
+	cin >> k >> str;
+	for (int j = 0; j < 2 * k + 3; j++) {
+		for (int i = 0; str[i]; i++) {
+			if (i != 0) {
+				cout << ' ';
+			}
+			switch (str[i])
+			{
+			case '0':
+				if (j == 0 || j == 2 * k + 2) {
+					cout << " ";
+					for (int m = 0; m < k; m++) {
+						cout << '-';
+					}
+					cout << " ";
+				}
+				else if (j == k + 1) {
+					for (int m = 0; m < k + 2; m++) {
+						cout << ' ';
+					}
+				}
+				else {
+					cout << '|';
+					for (int m = 0; m < k; m++) {
+						cout << ' ';
+					}
+					cout << '|';
+				}
+				break;
+			case '1':
+				if (j == 0 || j == 2 * k + 2 || j == k + 1) {
+					for (int m = 0; m < k + 2; m++) {
+						cout << ' ';
+					}
+				}
+				else {//其他部分	
+					for (int m = 0; m < k+1; m++) {
+						cout << ' ';
+					}
+					cout << '|';
+				}
+				break;
+			case '2':
+				if (j == 0 || j == k + 1 || j == 2 * k + 2) {
+					cout << " ";
+					for (int m = 0; m < k; m++) {
+						cout << '-';
+					}
+					cout << " ";
+				}
+				else if (j > 0 && j < k + 1) {
+					for (int m = 0; m < k + 1; m++) {
+						cout << ' ';
+					}
+					cout << '|';
+				}
+				else if (j > k + 1 && j < 2 * k + 2) {
+					cout << '|';
+					for (int m = 0; m < k + 1; m++) {
+						cout << ' ';
+					}
+				}
+				break;
+			case '3':
+				if (j == 0 || j == k + 1 || j == 2 * k + 2) {
+					cout << " ";
+					for (int m = 0; m < k; m++) {
+						cout << '-';
+					}
+					cout << " ";
+				}
+				else {
+					for (int m = 0; m < k + 1; m++) {
+						cout << ' ';
+					}
+					cout << '|';
+				}
+				break;
+			case '4':
+				if (j == 0 || j == 2 * k + 2) {
+					for (int m = 0; m < k + 2; m++) {
+						cout << ' ';
+					}
+				}
+				else if (j == k + 1) {
+					cout << ' ';
+					for (int m = 0; m < k; m++) {
+						cout << '-';
+					}
+					cout << ' ';
+				}
+				else if (j > 0 && j < k + 1) {
+					cout << '|';
+					for (int m = 0; m < k; m++) {
+						cout << ' ';
+					}
+					cout << '|';
+				}
+				else if (j > k + 1 && j < 2 * k + 2) {
+					for (int m = 0; m < k + 1; m++) {
+						cout << ' ';
+					}
+					cout << '|';
+				}
+				break;
+			case '5':
+				if (j == 0 || j == k + 1 || j == 2 * k + 2) {
+					cout << " ";
+					for (int m = 0; m < k; m++) {
+						cout << '-';
+					}
+					cout << " ";
+				}
+				else if (j > 0 && j < k + 1) {
+					cout << '|';
+					for (int m = 0; m < k + 1; m++) {
+						cout << ' ';
+					}
+				}
+				else if (j > k + 1 && j < 2 * k + 2) {
+					for (int m = 0; m < k + 1; m++) {
+						cout << ' ';
+					}
+					cout << '|';
+				}
+				break;
+			case '6':
+				if (j == 0 || j == k + 1 || j == 2 * k + 2) {
+					cout << " ";
+					for (int m = 0; m < k; m++) {
+						cout << '-';
+					}
+					cout << " ";
+				}
+				else if (j > 0 && j < k + 1) {
+					cout << '|';
+					for (int m = 0; m < k + 1; m++) {
+						cout << ' ';
+					}
+				}
+				else if (j > k + 1 && j < 2 * k + 2) {
+					cout << '|';
+					for (int m = 0; m < k; m++) {
+						cout << ' ';
+					}
+					cout << '|';
+				}
+				break;
+			case '7':
+				if (j == 0) {
+					cout << " ";
+					for (int m = 0; m < k; m++) {
+						cout << '-';
+					}
+					cout << " ";
+				}
+				else if (j == k + 1) {
+					for (int m = 0; m < k + 2; m++) {
+						cout << " ";
+					}
+				}
+				else if (j == 2 * k + 2) {
+					for (int m = 0; m < k + 2; m++) {
+						cout << " ";
+					}
+				}
+				else {
+					for (int m = 0; m < k + 1; m++) {
+						cout << ' ';
+					}
+					cout << '|';
+				}
+				break;
+			case '8':
+				if (j == 0 || j == k+1||j == 2 * k + 2) {
+					cout << " ";
+					for (int m = 0; m < k; m++) {
+						cout << '-';
+					}
+					cout << " ";
+				}
+				else if (j == k + 1) {
+					cout << " ";
+					for (int m = 0; m < k; m++) {
+						cout << '-';
+					}
+					cout << " ";
+				}
+				else {
+					cout << '|';
+					for (int m = 0; m < k; m++) {
+						cout << ' ';
+					}
+					cout << '|';
+				}
+				break;
+			case '9':
+				if (j == 0 ||j==k+1 ||j == 2 * k + 2) {
+					cout << " ";
+					for (int m = 0; m < k; m++) {
+						cout << '-';
+					}
+					cout << " ";
+				}
+				else if (j > k + 1 && j < 2 * k + 2) {
+					for (int m = 0; m < k + 1; m++) {
+						cout << ' ';
+					}
+					cout << '|';
+				}
+				else {
+					cout << '|';
+					for (int m = 0; m < k; m++) {
+						cout << ' ';
+					}
+					cout << '|';
+				}
+				break;
+			}
+		}
+		cout << endl;
+	}
+	system("pause");
+	return 0;
+}
+//大佬做法
+#include<iostream>
+#include<string>
+using namespace std;
+
+int main() {
+	int k;
+	string s, m[10] = { "-|| ||-","  |  | ","- |-| -",
+	"- |- |-"," ||- | ",    "-| - |-","-| -||-",
+	"- |  | ","-||-||-","-||- |-" };
+	cin >> k >> s;
+	for (int p = 0; p < 7; p++) {
+		if (p == 2 || p == 5) continue;
+		if (p % 3 == 0) {
+			for (int i = 0; i < s.size(); i++) {
+				cout << ' ';
+				for (int j = 0; j < k; j++) {
+					cout << m[s[i] - 48][p];
+				}
+				cout << "  ";
+			}
+			cout << endl;
+		}
+		else {
+			for (int q = 0; q < k; q++) {
+				for (int i = 0; i < s.size(); i++) {
+					cout << m[s[i] - 48][p];
+					for (int j = 0; j < k; j++) {
+						cout << ' ';
+					}
+					cout << m[s[i] - 48][p + 1] << ' ';
+				}
+				cout << endl;
+			}
+		}
+	}
+	system("pause");
+	return 0;
+}

@@ -1,0 +1,51 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+class Solution {
+	int[] a;
+	int len;
+
+	public int C(int dis) {
+		int re = 0;
+		for (int i = 1, j = 0; i < len; i++) {
+			if (a[i] - a[j] < dis)
+				re++;
+			else
+				j = i;
+		}
+		return re;
+	}
+
+	public void slove(int[] a, int L, int len, int M) {
+		this.a = a;
+		this.len = len;
+		int up = L + 1, lb = 0;// 上界+1
+		while (up - lb > 1) {
+			int mid = (up + lb) >> 1;
+			if (C(mid) > M) {
+				up = mid;
+			} else {
+				lb = mid;
+			}
+		}
+		System.out.print(lb);
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int L = input.nextInt(), N = input.nextInt(), M = input.nextInt();
+		int[] a = new int[N + 2];
+		a[0] = 0;
+		a[N + 1] = L;
+		for (int i = 1; i <= N; i++)
+			a[i] = input.nextInt();
+		Arrays.sort(a);
+		Solution s = new Solution();
+		s.slove(a, L, N + 2, M);
+	}
+
+}

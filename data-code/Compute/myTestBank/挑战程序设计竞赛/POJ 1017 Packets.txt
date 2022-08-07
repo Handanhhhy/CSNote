@@ -1,0 +1,41 @@
+package Compute;
+
+import java.util.Scanner;
+
+class Solution {
+	Scanner input = new Scanner(System.in);
+	int a, b, c, d, e, f, sum, res;
+	int[] array = { 0, 5, 3, 1 };
+
+	public Solution() {
+		getInput();
+		while (sum != 0) {
+			res = f + e + d + (c + 3) / 4;// size 6+5+4+3
+			int n2 = d * 5 + array[c % 4];
+			if (b > n2)
+				res += (b - n2 + 8) / 9;
+			int n1 = 36 * res - 36 * f - 25 * e - 16 * d - 9 * c - 4 * b;
+			if (a > n1)
+				res += (a - n1 + 35) / 36;
+			System.out.println(res);
+			getInput();
+		}
+
+	}
+
+	public void getInput() {
+		a = input.nextInt();
+		b = input.nextInt();
+		c = input.nextInt();
+		d = input.nextInt();
+		e = input.nextInt();
+		f = input.nextInt();
+		sum = a + b + c + d + e + f;
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Solution s = new Solution();
+	}
+}

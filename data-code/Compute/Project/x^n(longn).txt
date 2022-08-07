@@ -1,0 +1,46 @@
+//x的n次方,用longn时间复杂度 二分法
+//任何一个数都可以用二进制表示，根据二进制位是0或者1决定该位数是否保留计算
+double Pow(double x, int n)
+{
+	double temp = x;
+	double result = 1;
+
+	while (n) {
+		if (n % 2) {//n&1判断n二进制最后一位是否为1
+			result = result * temp;
+		}
+		n = n / 2;
+		temp *= temp;  
+	}
+
+	return result;
+}
+
+//x的n次方结果对k取余,用longn时间复杂度 二分法
+#include<iostream>
+using namespace std;
+
+long long Pow(double x, int n,int k)
+{
+	long long temp = x;
+	long long result = 1;
+
+	while (n) {
+		if (n % 2) {
+			result = result * temp;
+			result %= k;
+		}
+		n = n / 2;
+		temp *= temp;
+		temp %= k;
+	}
+	return result % k;
+}
+
+int main() {
+	long long b, p, k;
+	cin >> b >> p >> k;
+	cout << b << "^" << p << " mod " << k << "=" << Pow(b, p, k);
+	system("pause");
+	return 0;
+}

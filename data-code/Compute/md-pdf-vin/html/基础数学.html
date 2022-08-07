@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>基础数学</title></head>
+<body><h2>数学问题</h2>
+<h3>最大公约数(GCD)</h3>
+<h4>辗转相除法(欧几里得算法)。</h4>
+<p>以除数和余数反复做除法运算，当余数为 0 时，取当前算式除数为最大公约数。</p>
+<pre><code class='language-c' lang='c'>//时间复杂度O(log max(a,b))
+int gcd(int a, int b) {
+	if (b == 0) return a;
+	return gcd(b, a%b);
+}
+</code></pre>
+<h4>扩展欧几里得算法</h4>
+<p>裴蜀定理：若a,b是整数,且gcd(a,b)=d，那么对于任意的整数x,y,ax+by都一定是d的倍数，特别地，一定存在整数x,y，使ax+by=d成立。</p>
+<blockquote><p>设整数a,b(a&gt;b)</p>
+<p>a=(a/b)*b+c   ····①</p>
+<p>b=(b/c)*c+d   ····②</p>
+<p>c=(c/d)*d+0   ····③</p>
+<p>则d为a,b的最大公约数，将d反带入得d=(mn-1)b-an → ax+by=gcd(a,b)</p>
+<p>ax+by=1时，当且仅当a,b互质。</p>
+</blockquote>
+<p>算法设计：</p>
+<blockquote><p>使用递归定义，假设已经得到bx&#39;+(a%b)y&#39;=gcd(a,b)</p>
+<p>因为：a%b=a-(a/b),得到ay&#39;+b(x&#39;-(a/b)y&#39;)=gcd(a,b)</p>
+<p>当b=0时，有，a*1+b*0=a=gcd(a,b) //相当于将③的下一步递归进gcd，判断得到gcd(a,b)</p>
+</blockquote>
+<pre><code class='language-c++' lang='c++'>#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+int extgcd(int a, int b, int&amp;x, int &amp;y) {
+	int d = a;
+	if (b != 0) {
+		d = extgcd(b, a%b, y, x);
+		y -= (a / b)*x;
+	}
+	else {
+		x = 1, y = 0;
+	}
+	return d;
+}
+
+int main() {
+	int a, b, x = 0, y = 0;
+	cin &gt;&gt; a &gt;&gt; b;
+	extgcd(a, b, x, y);
+	cout &lt;&lt; x &lt;&lt; &quot; &quot; &lt;&lt; y;
+	return 0;
+}
+</code></pre>
+<p>&nbsp;</p>
+<h3>最小公倍数</h3>
+<p>最小公倍数等于两数之积除以其最大公约数。</p>
+<pre><code class='language-c' lang='c'>int lcm(int a, int b){
+	return (a * b) / gcd(a, b);
+}
+</code></pre>
+<pre><code class='language-java' lang='java'>class Solution {
+	public int lcm(int a, int b) {
+		int c = a * b;
+		if (a &lt; b) {
+			int r = 0;
+			r = a;
+			a = b;
+			b = r;
+		}
+		while (true) {
+			int r = a % b;
+			if (r == 0) {
+				return c / b;
+			} else {
+				a = b;
+				b = r;
+			}
+		}
+	}
+}
+
+</code></pre>
+<h3>有关素数的算法</h3>
+<h4>素数判定</h4>
+<p>n的约束不会大于sqrt(n)</p>
+<pre><code class='language-c++' lang='c++'>//时间复杂度O(sqrt(n))
+bool is_prime(int n) {
+	for (int i = 2; i * i &lt;= n; i++)
+		if (n%i == 0) return false;
+	return n != 1;
+}
+</code></pre>
+<blockquote><p>了解：约数枚举 整数分解</p>
+</blockquote>
+<h4>埃氏筛法</h4>
+<p>在2~n中，最小素数为2，故划去所有2的倍数，然后是3，则划去3所有的倍数······，最终剩下的就是素数。</p>
+<p>复杂度O(nloglogn)</p>
+<pre><code class='language-c' lang='c'>#define maxsize 100
+int prime[maxsize + 1];
+bool is_prime[maxsize + 1];
+int sieve(int n) {
+	for (int i = 0; i &lt;= n; i++)
+		is_prime[i] = true;
+	is_prime[0] = is_prime[1] = false;
+	int p = 0;
+	for (int i = 2; i &lt;= n; i++) {
+		if (is_prime[i]) {
+			prime[p++] = i;
+			for (int j = i * 2; j &lt;= n; j += i) 
+				is_prime[j] = false;
+		}
+	}
+	return p;
+}
+</code></pre>
+<h4>区间筛法</h4>
+<p>对于区间 [a,b)，对于b只需要检测到sqrt(b),故先筛出 [2,sqrt(b)) 的素数表，然后筛的同时，在区间[a,b)中划去当前被筛的数的倍数。使用max(2LL, (a + i - 1) / i)*i 来算出[a,b)中从2起的倍数，最后0—(b-a)中true的个数为素数个数。</p>
+<pre><code class='language-c++' lang='c++'>#define maxsize 100
+typedef long long ll;
+bool is_prime[maxsize], is_prime_small[maxsize];
+//is_prime[i-a]=true → i为素数
+void segment_sieve(ll a, ll b) {
+	for (int i = 0; (ll)i * i &lt; b; i++)//根据[a,b)和[a.b]取等号 默认左闭右开
+		is_prime_small[i] = true;
+	for (int i = 0; i &lt; b - a; i++)
+		is_prime[i] = true;
+	for (int i = 2; (ll)i*i &lt; b; i++) {
+		if (is_prime_small[i]) {
+			for (int j = 2 * i; (ll)j*j &lt; b; j += i)
+				is_prime_small[j] = false;
+			for (ll j = max(2LL, (a + i - 1) / i)*i; j &lt; b; j += i)
+				is_prime[j - a] = false;
+		}
+	}
+}
+</code></pre>
+<h3>模运算</h3>
+<h4>快速幂</h4>
+<p>x^n=((((x^2)^2)^2)^2)··· ,n=2^k1+2^k2+·····,也可以将n理解为二进制形式</p>
+<pre><code class='language-c++' lang='c++'>typedef long long ll;
+//n&gt;0
+ll mod_pow(ll x, ll n, ll mod) {
+	ll res = 1;
+	while (n) {
+		if (n &amp; 1) res = res *  x% mod;
+		x = x * x % mod;
+		n &gt;&gt;= 1;
+	}
+	return res;
+}
+</code></pre>
+<pre><code class='language-c' lang='c'>typedef long long ll;
+//(a * b)%mod 
+ll mod_mult(ll a, ll b, ll mod) {
+	ll res = 0;
+    a = a % mod;
+	b = b % mod;
+	while (b) {
+		if (b &amp; 1)
+			res = (res + a) % mod;
+		a = (a &lt;&lt; 1) % mod;
+		b &gt;&gt;= 1;
+	}
+	return res;
+}
+//(a^b)%mod
+ll mod_pow(ll a, ll b, ll mod) {
+	ll res = 1;
+    a = a % mod;
+	while (b) {
+		if (b &amp; 1)
+			res = mod_mult(res, a, mod);
+		a = mod_mult(a, a, mod);
+		b &gt;&gt;= 1;
+	}
+	return res;
+}
+
+</code></pre>
+<p>&nbsp;</p>
+</body>
+</html>

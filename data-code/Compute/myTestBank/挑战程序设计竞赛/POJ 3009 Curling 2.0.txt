@@ -1,0 +1,81 @@
+import java.util.Scanner;
+
+class Solution {
+	int map[][];
+	int W, H, ans;
+	int[][] dir = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+
+	public void init(int _map[][], int w, int h, int sx, int sy) {
+		ans = 11;
+		map = _map;
+		W = w;
+		H = h;
+		map[sy][sx] = 0;
+		for (int i = 0; i < 4; i++) {
+			int _x = sx + dir[i][0], _y = sy + dir[i][1];
+			if (_x < 0 || _y < 0 || _x >= W || _y >= H || map[_y][_x] == 1)
+				continue;
+			dfs(_x, _y, 1, i);
+		}
+
+		if (ans > 10)
+			System.out.println("-1");
+		else
+			System.out.println(ans);
+	}
+
+	public void dfs(int x, int y, int hit, int curdir) {
+		if (hit > 10 || x < 0 || y < 0 || x >= W || y >= H)
+			return;
+		if (map[y][x] == 3) {
+			ans = Math.min(ans, hit);
+			return;
+		}
+		int _x = x + dir[curdir][0], _y = y + dir[curdir][1];
+		if (map[y][x] == 1) {
+			map[y][x] = 0;
+			x -= dir[curdir][0];
+			y -= dir[curdir][1];
+			for (int i = 0; i < 4; i++) {
+				_x = x + dir[i][0];
+				_y = y + dir[i][1];
+				if (_x < 0 || _y < 0 || _x >= W || _y >= H || map[_y][_x] == 1)
+					continue;
+				dfs(_x, _y, ++hit, i);
+				--hit;
+			}
+			x += dir[curdir][0];
+			y += dir[curdir][1];
+			map[y][x] = 1;
+
+		} else
+			dfs(_x, _y, hit, curdir);
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner inputScanner = new Scanner(System.in);
+		Solution s = new Solution();
+		int[][] _map;
+		int w, h, sx = 0, sy = 0, ex = 0, ey = 0;
+		while (true) {
+			w = inputScanner.nextInt();
+			h = inputScanner.nextInt();
+			if (w == 0 && h == 0)
+				break;
+			_map = new int[h][w];
+			for (int i = 0; i < h; i++) {
+				for (int j = 0; j < w; j++) {
+					_map[i][j] = inputScanner.nextInt();
+					if (_map[i][j] == 2) {
+						sx = j;
+						sy = i;
+					}
+				}
+			}
+			s.init(_map, w, h, sx, sy);
+		}
+
+	}
+}

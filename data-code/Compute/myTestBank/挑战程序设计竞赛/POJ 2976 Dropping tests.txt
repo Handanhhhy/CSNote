@@ -1,0 +1,58 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+class Solution {
+	int[] a, b;
+	int len, k;
+
+	public boolean C(double x) {
+		double[] y = new double[len];
+		for (int i = 0; i < len; i++) {
+			y[i] = a[i] - x * b[i];
+		}
+		Arrays.sort(y);
+		double sum = 0;
+		for (int i = k; i < len; i++)
+			sum += y[i];
+
+		return sum >= 0;
+	}
+
+	void solve(int[] a, int[] b, int len, int k) {
+		this.a = a;
+		this.b = b;
+		this.len = len;
+		this.k = k;
+		double lb = 0, up = 1.0;
+		for (int i = 0; i < 100; i++) {
+			double mid = (lb + up) / 2;
+			if (C(mid)) {
+				lb = mid;
+			} else {
+				up = mid;
+			}
+		}
+		System.out.printf("%.0f\n", lb * 100);
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		Solution s = new Solution();
+		while (true) {
+			int n = input.nextInt(), k = input.nextInt();
+			if (n == 0 && k == 0)
+				break;
+			int[] a = new int[n], b = new int[n];
+			for (int i = 0; i < n; i++)
+				a[i] = input.nextInt();
+			for (int i = 0; i < n; i++)
+				b[i] = input.nextInt();
+			s.solve(a, b, n, k);
+		}
+	}
+
+}

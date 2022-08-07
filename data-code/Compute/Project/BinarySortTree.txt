@@ -1,0 +1,171 @@
+#pragma once
+//二叉排序树的建立
+template<typename T>
+class BinarySortTree
+{
+protected:
+	class BinaryNode
+	{
+	public:
+		BinaryNode();
+		BinaryNode(T data);
+		~BinaryNode();
+	public:
+		T data;
+		BinaryNode *parent;
+		BinaryNode *lchild;
+		BinaryNode *rchild;
+	};
+
+public:
+	BinarySortTree();
+	BinarySortTree(T array[], size_t array_length);
+	~BinarySortTree();
+	void setArray(T array[], size_t array_length);
+	void sort(T array[], size_t array_length);
+	void insert(BinaryNode *&node, T data);
+	void create();
+	void midOrdprint();
+private:
+	void minOrd(BinaryNode *r);
+	void Free(BinaryNode * r);
+private:
+	T *array;
+	size_t length;
+	BinaryNode *root;
+};
+
+
+template<typename T>
+BinarySortTree<T>::BinarySortTree()
+{
+	array = nullptr;
+	length = 0;
+	root = nullptr;
+}
+
+template<typename T>
+ BinarySortTree<T>::BinarySortTree(T array[], size_t array_length)
+{
+	 setArray(array,array_length);
+}
+
+template<typename T>
+BinarySortTree<T>::~BinarySortTree()
+{
+	if (root == nullptr) {
+		return;
+	}
+	Free(root);
+}
+
+template<typename T>
+void BinarySortTree<T>::setArray(T array[], size_t array_length)
+{
+	this->array = array;
+	this->length = array_length;
+	this->root = nullptr;
+}
+
+template<typename T>
+void BinarySortTree<T>::sort(T array[], size_t array_length)
+{
+	if (root != nullptr) {
+		Free(root);
+	}
+	setArray(array, array_length);
+	create();
+}
+
+
+template<typename T>
+void BinarySortTree<T>::insert(BinaryNode *&node, T data)
+{
+	if (node == nullptr) {
+		node = new BinaryNode(data);
+		return;
+	}
+	if (data > node->data) {
+		insert(node->rchild, data);
+	}
+	else {
+		insert(node->lchild, data);
+	}
+}
+
+template<typename T>
+void BinarySortTree<T>::create()
+{
+	if (length == 0) {
+		return;
+	}
+	bool flag = false;
+	T temp = array[0];
+	for (int i = 1; i < length; i++) {
+		if (array[i] == temp) {
+			flag = true;
+		}
+	}
+	if (flag) {
+		std::cout << "排序中不能出现相等的结点" << std::endl;
+	}
+	for (int i = 0; i < length; i++) {
+		insert(root, array[i]);
+	}
+}
+
+template<typename T>
+void BinarySortTree<T>::midOrdprint()
+{
+	if (root == nullptr) {
+		return;
+	}
+	minOrd(root);
+	std::cout << std::endl;
+}
+
+template<typename T>
+void BinarySortTree<T>::minOrd(BinaryNode *r)
+{
+	if (r == nullptr) {
+		return;
+	}
+	minOrd(r->lchild);
+	std::cout << r->data << " ";
+	minOrd(r->rchild);
+}
+
+template<typename T>
+void BinarySortTree<T>::Free(BinaryNode * r)
+{
+	if (r == nullptr) {
+		return;
+	}
+	Free(r->rchild);
+	Free(r->lchild);
+	delete r;
+}
+
+
+template<typename T>
+BinarySortTree<T>::BinaryNode::BinaryNode()
+{
+	parent = nullptr;
+	lchild = nullptr;
+	rchild = nullptr;
+}
+
+template<typename T>
+BinarySortTree<T>::BinaryNode::BinaryNode(T data)
+{
+	parent = nullptr;
+	lchild = nullptr;
+	rchild = nullptr;
+	this->data = data;
+}
+
+template<typename T>
+BinarySortTree<T>::BinaryNode::~BinaryNode()
+{
+
+}

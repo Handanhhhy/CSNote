@@ -1,0 +1,41 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+class cow implements Comparable<cow> {
+	int w, s, ws;
+
+	public cow(int w, int s) {
+		this.w = w;
+		this.s = s;
+		ws = w + s;
+	}
+
+	@Override
+	public int compareTo(cow o) {
+		return this.ws > o.ws ? -1 : 1;
+	}
+
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int n = input.nextInt();
+		cow[] cows = new cow[n];
+		int sum = 0, ans = Integer.MIN_VALUE;// 答案可能为负
+		for (int i = 0; i < n; i++) {
+			int w = input.nextInt(), s = input.nextInt();
+			cows[i] = new cow(w, s);
+			sum += w;
+		}
+		Arrays.sort(cows);
+		for (int i = 0; i < n; i++) {
+			sum -= cows[i].w;// 是减去w二不是ws
+			ans = Math.max(ans, sum - cows[i].s);
+		}
+		System.out.print(ans);
+	}
+
+}

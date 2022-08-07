@@ -1,0 +1,45 @@
+package Compute;
+
+import java.util.Scanner;
+
+class Solution {
+	int len = 10000001;
+	int prime_type[] = new int[len + 1];
+
+	Solution() {
+		for (int i = 5; i <= len; i += 4) {
+			for (int j = i; j <= len; j += 4) {
+				if ((long) i * j > len)
+					break;
+				int m = i * j;
+				if (prime_type[i] == 0 && prime_type[j] == 0)// 两者均为"质数"
+					prime_type[m] = 1;// 为semi_prime
+				else
+					prime_type[m] = 2;// 为compo_prime
+			}
+		}
+		int count = 0;
+		for (int i = 5; i <= len; i++) {
+			if (prime_type[i] == 1)
+				count++;
+			prime_type[i] = count;
+		}
+	}
+
+	void solve(int n) {
+		System.out.println(n + " " + prime_type[n]);
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		Solution solution = new Solution();
+		while (true) {
+			int n = input.nextInt();
+			if (n == 0)
+				break;
+			solution.solve(n);
+		}
+	}
+}

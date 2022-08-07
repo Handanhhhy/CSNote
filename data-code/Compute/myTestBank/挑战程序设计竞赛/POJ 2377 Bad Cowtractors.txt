@@ -1,0 +1,90 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Scanner;
+
+class edge {
+	int from, to, cost;
+
+	public edge(int f, int t, int c) {
+		from = f;
+		to = t;
+		cost = c;
+	}
+}
+
+class Solution {
+	int[] par, rank;
+	int n;
+
+	public int solution(int n, edge[] es, int E) {
+		this.n = n;
+		init(n);
+		Arrays.sort(es, new Comparator<edge>() {
+			@Override
+			public int compare(edge o1, edge o2) {
+				return o1.cost < o2.cost ? 1 : -1;
+			}
+
+		});
+		int res = 0;
+		for (int i = 0; i < E; i++) {
+			if (!same(es[i].from, es[i].to)) {
+				unite(es[i].from, es[i].to);
+				res += es[i].cost;
+			}
+		}
+		int jude = 0;
+		for (int i = 0; i < n; i++)
+			if (par[i] == i)
+				jude++;
+		return jude > 1 ? -1 : res;
+	}
+
+	public void init(int n) {
+		par = new int[n];
+		rank = new int[n];
+		for (int i = 0; i < n; i++) {
+			par[i] = i;
+			rank[i] = 0;
+		}
+	}
+
+	public int find(int x) {
+		if (par[x] == x)
+			return x;
+		return par[x] = find(par[x]);
+	}
+
+	public void unite(int x, int y) {
+		x = find(x);
+		y = find(y);
+		if (x == y)
+			return;
+		if (rank[x] < rank[y]) {
+			par[x] = y;
+		} else {
+			par[x] = y;
+			if (rank[x] == rank[y])
+				rank[x]++;
+		}
+	}
+
+	public boolean same(int x, int y) {
+		return find(x) == find(y);
+	}
+}
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		Solution s = new Solution();
+		int n = input.nextInt(), m = input.nextInt();
+		edge[] edges = new edge[m];
+		for (int i = 0; i < m; i++)
+			edges[i] = new edge(input.nextInt() - 1, input.nextInt() - 1, input.nextInt());
+		System.out.print(s.solution(n, edges, m));
+	}
+}

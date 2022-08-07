@@ -1,0 +1,43 @@
+package Compute;
+
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int mod = 1000000000;
+		int n = input.nextInt();
+		int dp[] = new int[n + 1];
+		dp[0] = 1;
+		for (int i = 0; (1 << i) <= n; i++) {// 完全背包
+			for (int j = 1 << i; j <= n; j++) {
+				dp[j] = (dp[j] + dp[j - (1 << i)]) % mod;
+			}
+		}
+		System.out.print(dp[n]);
+	}
+
+}
+=====================================================
+package Compute;
+
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int mod = 1000000000;
+		int n = input.nextInt();
+		int dp[] = new int[n + 1];
+		dp[0] = 1;
+        //全部偶数所有单元都是２的倍数，就相当于dp[n/2]的序列*2对应得来，所以dp[n]=dp[n-1]+dp[n/2]
+		for (int i = 1; i <= n; i++) {// 技巧 奇数=dp[n-1] 偶数=奇数加全部偶数 dp[n-1]+dp[n>>1]
+			if ((i & 1) == 1)
+				dp[i] = dp[i - 1] % mod;
+			else
+				dp[i] = (dp[i - 1] + dp[i >> 1]) % mod;
+		}
+		System.out.print(dp[n]);
+	}
+
+}

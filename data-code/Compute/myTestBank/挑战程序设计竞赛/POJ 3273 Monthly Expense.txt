@@ -1,0 +1,53 @@
+package Compute;
+
+import java.util.Scanner;
+
+class Solution {
+	int[] a;
+	int len, M;
+
+	public boolean C(int money) {
+		int seg = 1, temp = 0;
+		for (int i = 0; i < len; i++) {
+			if (a[i] + temp <= money) {
+				temp += a[i];
+			} else {
+				temp = a[i];
+				seg++;
+			}
+		}
+		return seg > M;
+	}
+
+	public void slove(int[] a, int len, int M, int max, int min) {
+		this.a = a;
+		this.len = len;
+		this.M = M;
+		int up = max, lb = min;//上下界和lb,up在循环中的判断和赋值都要很精确
+		while (up > lb) {
+			int mid = (up + lb) >> 1;
+			if (C(mid)) {
+				lb = mid + 1;
+			} else {
+				up = mid;
+			}
+		}
+		System.out.print(lb);
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int N = input.nextInt(), M = input.nextInt(), sum = 0, min = 0;
+		int[] a = new int[N];
+		for (int i = 0; i < N; i++) {
+			a[i] = input.nextInt();
+			sum += a[i];
+			min = Math.max(min, a[i]);
+		}
+		Solution s = new Solution();
+		s.slove(a, N, M, sum, min);
+	}
+
+}

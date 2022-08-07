@@ -1,0 +1,83 @@
+/*
+	线性表的顺序存储结构
+	有待修改的地方:使每一个函数不需要返回
+*/
+#include<stdlib.h>
+#include<stdio.h>
+#define MaxSize 10
+typedef int ElemType;//修改ElemType时要修改获取和输出的数据类型及是否需要取地址
+typedef struct _Slist
+{
+	ElemType Array[MaxSize+1];
+	int length;
+}Slist;
+Slist Sinit(Slist s);
+Slist Sinsert(Slist s, int add,ElemType insert);
+Slist Sdelete(Slist s, int del);
+void PRINT(Slist s);
+int main()
+{
+	Slist s = { '\0' };
+	int w, insert, del;
+	scanf("%d%d%d", &w,&insert,&del);
+	s=Sinit(s);
+	s=Sinsert(s, w, insert);
+	s=Sdelete(s, del);
+	PRINT(s);
+	system("pause");
+	return 0;
+}
+
+Slist Sinit(Slist s)
+{
+	int i = 0;
+	char S = 0;
+	do
+	{
+		printf("请输入:");
+		scanf("%d", &s.Array[i++]);	
+		fflush(stdin);
+		s.length++;	
+		printf("按S键结束任意键继续");		
+		S = getch();
+		getch();
+		printf("\n");
+	} while (i < MaxSize&&S!='s');
+	return s;
+}
+Slist Sinsert(Slist s, int add, ElemType insert)
+{
+	if (s.length == MaxSize)
+	{
+		printf("空间已满,不能插入.\n");
+		getchar();
+		exit(1);
+	}
+	for (int i = MaxSize-1; i >=add; i--)
+	{
+		s.Array[i] = s.Array[i - 1];
+	}
+	s.length++;
+	s.Array[add] = insert;
+	return s;
+}
+Slist Sdelete(Slist s, int del)
+{
+	if (del > MaxSize||del<0)
+	{
+		printf("输入越界\n");
+		getchar();
+		exit(1);
+	}
+	for (int i = del-1; i < MaxSize; i++)
+	{
+		s.Array[i] = s.Array[i + 1];
+	}
+	s.length--;
+	return s;
+}
+void PRINT(Slist s)
+{
+	for (int i = 0; i < s.length; i++)
+		printf("%d", s.Array[i]);
+}

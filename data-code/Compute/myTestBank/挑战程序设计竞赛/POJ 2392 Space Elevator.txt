@@ -1,0 +1,51 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+class block implements Comparable<block> {
+	int h, a, c;
+
+	public block(int h, int a, int c) {
+		this.h = h;
+		this.a = a;
+		this.c = c;
+	}
+
+	@Override
+	public int compareTo(block o) {
+		return this.a < o.a ? -1 : 1;
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int n = input.nextInt();
+		final int maxH = 40000;
+		block[] blocks = new block[n];
+		for (int i = 0; i < n; i++)
+			blocks[i] = new block(input.nextInt(), input.nextInt(), input.nextInt());
+		Arrays.sort(blocks);
+		int[] dp = new int[maxH + 5], g, que = new int[maxH + 5];
+		int ans = 0;
+		for (int i = 0; i < n; i++) {
+			g = Arrays.copyOf(dp, maxH + 5);
+			for (int j = 0; j < blocks[i].h; j++) {
+				int h = 0, t = -1;
+				for (int k = j; k <= blocks[i].a; k += blocks[i].h) {//物品限制
+					dp[k] = g[k];
+					if (h <= t && (que[h] < k - blocks[i].c * blocks[i].h))
+						h++;
+					if (h <= t)
+						dp[k] = Math.max(dp[k], g[que[h]] + (k - que[h]));
+					if (h <= t && g[que[t]] - (que[t] - j) <= g[k] - (k - j))
+						t--;
+					que[++t] = k;
+					ans = Math.max(ans, dp[k]);
+				}
+			}
+		}
+		System.out.print(ans);
+	}
+}

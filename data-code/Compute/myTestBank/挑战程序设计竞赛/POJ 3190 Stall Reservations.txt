@@ -1,0 +1,60 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Scanner;
+
+class period implements Comparable<period> {
+	int s, e, pos;
+
+	public period(int s, int e, int i) {
+		this.s = s;
+		this.e = e;
+		pos = i;
+	}
+
+	@Override
+	public int compareTo(period o) {
+		if (o.e == e)
+			return o.s < s ? 1 : -1;
+		return o.e < e ? 1 : -1;
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int n = input.nextInt();
+		period p[] = new period[n];
+		for (int i = 0; i < n; i++) {
+			int s = input.nextInt(), e = input.nextInt();
+			p[i] = new period(s, e, i);
+		}
+		Arrays.sort(p, new Comparator<period>() {
+			@Override
+			public int compare(period o1, period o2) {
+				if (o1.s == o2.s)
+					return o1.e < o2.e ? -1 : 1;
+				return o1.s < o2.s ? -1 : 1;
+			}
+		});
+		PriorityQueue<period> queue = new PriorityQueue<period>();
+		int ans = 0;
+		int[] order = new int[n];
+		queue.offer(p[0]);
+		order[p[0].pos] = ++ans;
+		for (int i = 1; i < n; i++) {
+			if (p[i].s > queue.peek().e) {
+				order[p[i].pos] = order[queue.poll().pos];
+			} else {
+				order[p[i].pos] = ++ans;
+			}
+			queue.offer(p[i]);
+		}
+		System.out.println(ans);
+		for (int i = 0; i < n; i++)
+			System.out.println(order[i]);
+	}
+
+}

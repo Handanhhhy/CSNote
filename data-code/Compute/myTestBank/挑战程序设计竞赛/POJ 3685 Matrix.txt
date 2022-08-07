@@ -1,0 +1,57 @@
+package Compute;
+
+import java.util.Scanner;
+
+class Solution {
+	long n, m;
+
+	public long cal(long i, long j) {
+		return i * i + j * j + i * j + 100000 * (i - j);
+	}
+
+	public boolean C(long num) {
+		long count = 0;
+		for (int j = 1; j <= n; j++) {
+			long lb = 0, up = n + 1;
+			while (up - lb > 1) {
+				long mid = (lb + up) >> 1;
+				if (cal(mid, j) < num) {
+					lb = mid;
+				} else {
+					up = mid;
+				}
+			}
+			count += lb;
+		}
+		return count >= m;
+	}
+
+	void solve(long n, long m) {
+		this.n = n;
+		this.m = m;
+		long up = n * n + 100000 * n + n * n + n * n, lb = -100000 * n;
+		while (up - lb > 1) {
+			long mid = (up + lb) >> 1;
+			if (C(mid)) {
+				up = mid;
+			} else {
+				lb = mid;
+			}
+		}
+		System.out.println(lb);
+	}
+
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		Solution s = new Solution();
+		int test = input.nextInt();
+		while (test-- > 0) {
+			long n = input.nextLong(), m = input.nextLong();//n也得开long
+			s.solve(n, m);
+		}
+	}
+
+}

@@ -1,0 +1,55 @@
+#include<iostream>
+#include<iomanip>
+//L型骨牌棋盘覆盖
+constexpr int k = 2;
+
+int map[2 << k][2 << k];
+
+void division(int l_x, int  l_y, int r_x, int  r_y, int recover_x, int recover_y) {
+	if (r_x - l_x <= 2 && r_y - l_y <= 2) {
+		return;
+	}
+	int mid_x = (l_x + r_x) / 2, mid_y = (l_y + r_y) / 2;
+	if (recover_x < mid_x && recover_y < mid_y) {//已被覆盖的在左上
+		map[mid_x][mid_y - 1] = -1; map[mid_x][mid_y] = -1; map[mid_x - 1][mid_y] = -1;//顺时针
+		division(l_x, l_y, mid_x, mid_y, recover_x, recover_y);//左上
+		division(mid_x, mid_y, r_x, l_y, mid_x, mid_y - 1);//右上
+		division(mid_x, mid_y, r_x, r_y, mid_x, mid_y);//右下
+		division(l_x, r_y, mid_x, mid_y, mid_x - 1, mid_y);//左下
+	}
+	else if (recover_x >= mid_x && recover_y <= mid_y) {//右上
+		map[mid_x][mid_y] = -1; map[mid_x - 1][mid_y] = -1; map[mid_x - 1][mid_y - 1] = -1;//顺时针
+		division(l_x, l_y, mid_x, mid_y, mid_x - 1, mid_y - 1);//左上
+		division(mid_x, mid_y, r_x, l_y, recover_x, recover_y);//右上
+		division(mid_x, mid_y, r_x, r_y, mid_x, mid_y);//右下
+		division(l_x, r_y, mid_x, mid_y, mid_x - 1, mid_y);//左下
+	}
+	else if (recover_x < mid_x && recover_y >= mid_y) {//左下
+		map[mid_x][mid_y] = -1; map[mid_x - 1][mid_y - 1] = -1; map[mid_x][mid_y - 1] = -1;//顺时针
+		division(l_x, l_y, mid_x, mid_y, mid_x - 1, mid_y - 1);//左上
+		division(mid_x, mid_y, r_x, l_y, mid_x, mid_y - 1);//右上
+		division(mid_x, mid_y, r_x, r_y, mid_x, mid_y);//右下
+		division(l_x, r_y, mid_x, mid_y, recover_x, recover_x);//左下
+	}
+	else if (recover_x > mid_x && recover_y > mid_y) {//右下
+		map[mid_x - 1][mid_y] = -1; map[mid_x - 1][mid_y - 1] = -1; map[mid_x][mid_y - 1] = -1;//顺时针
+		division(l_x, l_y, mid_x, mid_y, mid_x - 1, mid_y - 1);//左上
+		division(mid_x, mid_y, r_x, l_y, mid_x, mid_y - 1);//右上
+		division(mid_x, mid_y, r_x, r_y, recover_x, recover_x);//右下
+		division(l_x, r_y, mid_x, mid_y, mid_x - 1, mid_y);//左下
+	}
+}
+
+int main()
+{
+	division(0, 0, 2 << k, 2 << k, 0, 0);
+	for (int i = 0; i < 2 << k; i++) {
+		for (int j = 0; j < 2 << k; j++) {
+			std::cout << std::setw(2) << map[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+
+	system("pause");
+	return 0;
+}

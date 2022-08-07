@@ -1,0 +1,72 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Scanner;
+
+class pair {
+	int v, num;
+
+	public pair(int _v, int _num) {
+		v = _v;
+		num = _num;
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int n = input.nextInt(), c = input.nextInt();
+		pair[] v = new pair[n];
+		int need[] = new int[n];
+		int ans = 0;
+		for (int i = 0; i < n; i++) {
+			int d = input.nextInt();
+			int num = input.nextInt();
+			if (d >= c) {
+				v[i] = new pair(d, 0);
+				ans += num;
+			} else
+				v[i] = new pair(d, num);
+		}
+		Arrays.sort(v, new Comparator<pair>() {
+			@Override
+			public int compare(pair o1, pair o2) {
+				return o1.v < o2.v ? 1 : -1;
+			}
+		});
+		while (true) {
+			int pay = c;
+			Arrays.fill(need, 0);
+			for (int i = 0; i < n; i++) {// 第一次贪心面值从大到小选取最多
+				if (pay > 0 && v[i].num > 0) {
+					int t = Math.min(pay / v[i].v, v[i].num);
+					pay -= t * v[i].v;
+					need[i] = t;
+				}
+			}
+			for (int i = n - 1; i >= 0; i--) {// 第二次贪心将剩余应该交付的钱用不超过一个面值的钱补上
+				if (pay > 0 && v[i].num > 0) {
+					int t = Math.min(v[i].num - need[i], (pay + v[i].v - 1) / v[i].v);
+					pay -= t * v[i].v;
+					need[i] += t;
+				}
+			}
+			if (pay > 0)
+				break;
+			int limit = Integer.MAX_VALUE;
+			for (int i = 0; i < n; i++) {
+				if (need[i] != 0) {// 获取每一次贪心的最优解的次数减少循环
+					limit = Math.min(limit, v[i].num / need[i]);
+				}
+			}
+			ans += limit;
+			for (int i = 0; i < n; i++) {
+				if (need[i] != 0) {
+					v[i].num -= limit * need[i];
+				}
+			}
+		}
+		System.out.print(ans);
+	}
+}

@@ -1,0 +1,61 @@
+import java.util.Scanner;
+
+class Solution {
+	char map[][];
+	int W, H;
+	int s_x, s_y, ans;
+	int[][] dir = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+
+	public void init(char _map[][], int w, int h, int sx, int sy) {
+		ans = 1;
+		map = _map;
+		W = w;
+		H = h;
+		s_x = sx;
+		s_y = sy;
+		ans = dfs(s_x, s_y);
+		System.out.println(ans);
+	}
+
+	public int dfs(int x, int y) {
+		int step = 1;
+		for (int i = 0; i < 4; i++) {
+			int _x = x + dir[i][0], _y = y + dir[i][1];
+			if (_x < W && _x >= 0 && _y < H && _y >= 0 && map[_y][_x] == '.') {
+				map[_y][_x] = '#';
+				step += dfs(_x, _y);
+			}
+		}
+		return step;
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner inputScanner = new Scanner(System.in);
+		Solution s = new Solution();
+		String[] str;
+		char[][] _map;
+		int w, h, sx = 0, sy = 0;
+		while (true) {
+			w = inputScanner.nextInt();
+			h = inputScanner.nextInt();
+			if (w == 0 && h == 0)
+				break;
+			inputScanner.nextLine();
+			str = new String[h];
+			_map = new char[h][];
+			for (int i = 0; i < h; i++) {
+				str[i] = inputScanner.nextLine();
+				_map[i] = str[i].toCharArray();
+				int temp = str[i].indexOf('@', 0);
+				if (temp != -1) {
+					sx = temp;
+					sy = i;
+				}
+			}
+			s.init(_map, w, h, sx, sy);
+		}
+
+	}
+}

@@ -1,0 +1,65 @@
+import java.util.Scanner;
+
+class Solution {
+	int[] num;
+	int len, ans;
+
+	public void init(int[] a, int length) {
+		num = a;
+		len = length;
+		ans = 987654321;
+		if (len == 2)
+			ans = Math.abs(num[1] - num[0]);
+		else
+			recursive_permu(num, 0, len);
+		System.out.println(ans);
+	}
+
+	public void recursive_permu(int[] array, int cur, int length) {
+		if (cur >= len) {
+			int num1 = 0, num2 = 0;
+			for (int i = 0; i < len; i++) {
+				if (i < len >> 1)
+					num1 = num1 * 10 + array[i];
+				else
+					num2 = num2 * 10 + array[i];
+			}
+			ans = Math.min(ans, Math.abs(num1 - num2));
+			return;
+		}
+
+		for (int i = cur; i < len; i++) {
+			if ((cur == 0 || cur == len >> 1) && array[i] == 0)
+				continue;
+			swap(array, cur, i);
+			recursive_permu(array, cur + 1, length);
+			swap(array, cur, i);
+		}
+
+	}
+
+	public void swap(int[] array, int i, int j) {
+		int temp = array[i];
+		array[i] = array[j];
+		array[j] = temp;
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner inputScanner = new Scanner(System.in);
+		Solution s = new Solution();
+		int n = inputScanner.nextInt();
+		int[] a = new int[10];
+		inputScanner.nextLine();
+		for (int i = 0; i < n; i++) {
+			String str = inputScanner.nextLine();
+			String[] temp = str.split(" ");
+			for (int j = 0; j < temp.length; j++) {
+				a[j] = Integer.parseInt(temp[j]);
+			}
+			s.init(a, temp.length);
+		}
+
+	}
+}

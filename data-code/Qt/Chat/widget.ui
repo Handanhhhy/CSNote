@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Widget</class>
+ <widget class="QWidget" name="Widget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>705</width>
+    <height>299</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>局域网聊天</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="7">
+    <widget class="QToolButton" name="sendTool">
+     <property name="minimumSize">
+      <size>
+       <width>31</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>传输文件</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="image.qrc">
+       <normaloff>:/images/send.png</normaloff>:/images/send.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="10">
+    <widget class="QPushButton" name="exitPushButton">
+     <property name="text">
+      <string>退出</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="10">
+    <widget class="QTextEdit" name="messageTextEdit"/>
+   </item>
+   <item row="3" column="11">
+    <spacer name="horizontalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>107</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="9">
+    <widget class="QToolButton" name="clearTool">
+     <property name="minimumSize">
+      <size>
+       <width>31</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>清空聊天记录</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="image.qrc">
+       <normaloff>:/images/clear.png</normaloff>:/images/clear.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QFontComboBox" name="fontComboBox"/>
+   </item>
+   <item row="1" column="3" colspan="2">
+    <widget class="QToolButton" name="italicTool">
+     <property name="minimumSize">
+      <size>
+       <width>31</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>倾斜</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="image.qrc">
+       <normaloff>:/images/italic.png</normaloff>:/images/italic.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="10">
+    <widget class="QTextBrowser" name="messageBrowser">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>180</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2" colspan="2">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>46</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="7" colspan="3">
+    <spacer name="horizontalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>98</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="1">
+    <widget class="QPushButton" name="sendPushButton">
+     <property name="text">
+      <string>发送</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="10" rowspan="3" colspan="2">
+    <widget class="QTableWidget" name="userTableWidget">
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <column>
+      <property name="text">
+       <string>用户名</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>主机名</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>IP地址</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>163</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="4" colspan="3">
+    <widget class="QLabel" name="userNumLabel">
+     <property name="text">
+      <string>在线用户数:0人</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
+    <widget class="QToolButton" name="underlineTool">
+     <property name="minimumSize">
+      <size>
+       <width>31</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>下划线</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="image.qrc">
+       <normaloff>:/images/under.png</normaloff>:/images/under.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QComboBox" name="sizeComboBox">
+     <property name="currentIndex">
+      <number>3</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>9</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>10</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>11</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>12</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>13</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>14</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>15</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>16</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>17</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>18</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>19</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>20</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>21</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>22</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="1" column="6">
+    <widget class="QToolButton" name="colorTool">
+     <property name="minimumSize">
+      <size>
+       <width>31</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>更改字体颜色</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="image.qrc">
+       <normaloff>:/images/color.png</normaloff>:/images/color.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="8">
+    <widget class="QToolButton" name="saveTool">
+     <property name="minimumSize">
+      <size>
+       <width>31</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>保存聊天记录</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="image.qrc">
+       <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QToolButton" name="blodTool">
+     <property name="minimumSize">
+      <size>
+       <width>31</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>加粗</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="image.qrc">
+       <normaloff>:/images/bold.png</normaloff>:/images/bold.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="image.qrc"/>
+ </resources>
+ <connections/>
+</ui>

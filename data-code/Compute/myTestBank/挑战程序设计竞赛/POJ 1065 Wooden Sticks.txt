@@ -1,0 +1,53 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Scanner;
+
+class stick implements Comparable<stick> {
+	int l, w;
+
+	public stick(int l, int w) {
+		this.l = l;
+		this.w = w;
+	}
+
+	@Override
+	public int compareTo(stick o) {
+		if (this.l == o.l)
+			return this.w < o.w ? -1 : 1;
+		return this.l < o.l ? -1 : 1;
+	}
+
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int T = input.nextInt();
+		Comparator<stick> cmp = new Comparator<stick>() {
+			@Override
+			public int compare(stick o1, stick o2) {
+				if (o1.l <= o2.l && o1.w <= o2.w)
+					return 1;
+				return -1;
+			}
+		};
+		while (T-- != 0) {
+			int n = input.nextInt();
+			stick[] sticks = new stick[n];
+			for (int i = 0; i < n; i++)
+				sticks[i] = new stick(input.nextInt(), input.nextInt());
+			stick[] dp = new stick[n + 1];
+			Arrays.sort(sticks);
+			Arrays.fill(dp, new stick(Integer.MIN_VALUE, Integer.MIN_VALUE));
+			for (int i = 0; i < n; i++) {
+				int pos = -(Arrays.binarySearch(dp, sticks[i], cmp) + 1);
+				dp[pos] = sticks[i];
+			}
+			int ans = -(Arrays.binarySearch(dp, new stick(Integer.MIN_VALUE, Integer.MIN_VALUE), cmp) + 1);
+			System.out.println(ans);
+		}
+	}
+
+}

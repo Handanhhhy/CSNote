@@ -1,0 +1,99 @@
+bool is_prime(int n){
+	if(n<=3)
+		return n>1;
+	if(n%2==0)
+		return false;
+	for(int i=3;i*i<=n;i+=2)
+		if(n%i==0)
+			return false;
+	return true;
+}
+
+========================================
+class Solution {
+public:
+	vector<vector<char>> updateBoard(vector<vector<char>>& board, vector<int>& click) {
+		if (board[click[0]][click[1]] == 'M') {
+			board[click[0]][click[1]] = 'X';
+			return board;
+		}
+		int dir[8][2] = { {-1,0},{1,0},{0,-1},{0,1},{-1,-1},{-1,1} ,{1,-1} ,{1,1} };
+		int lengthx = board.front().size(), lengthy = board.size();
+		int book[51][51] = { 0 };
+		book[click[0]][click[1]] = 0;
+		for (int i = 0; i < lengthy; i++) {
+			for (int j = 0; j < lengthx; j++) {
+				if (board[i][j] == 'M') {
+					book[i][j] = -1;
+					for (int k = 0; k < 8; k++) {
+						int y = i + dir[k][0], x = j + dir[k][1];
+						if (x >= 0 && x < lengthx&&y >= 0 && y < lengthy)
+							book[y][x]++;
+					}
+				}
+			}
+		}
+		queue<vector<int>> que;
+		que.push(click);
+		while (!que.empty()) {
+			vector<int> temp = que.front();
+			que.pop();
+			if (!book[temp[0]][temp[1]]) {
+				board[temp[0]][temp[1]] = 'B';
+				for (int i = 0; i < 8; i++) {
+					vector<int> pos;
+					pos.push_back(temp[0] + dir[i][0]), pos.push_back(temp[1] + dir[i][1]);
+					if (pos[1] >= 0 && pos[1] < lengthx&&pos[0] >= 0 && pos[0] < lengthy) {
+						que.push(pos);
+					}
+				}
+			}
+			else if (book[temp[0]][temp[1]] > 0) {
+				board[temp[0]][temp[1]] = '0' + book[temp[0]][temp[1]];
+			}
+			book[temp[0]][temp[1]] = -1;
+		}
+		return board;
+	}
+};
+=======================================================
+class Solution {
+public:
+	vector<vector<char>> updateBoard(vector<vector<char>>& board, vector<int>& click) {
+		if (board[click[0]][click[1]] == 'M') {
+			board[click[0]][click[1]] = 'X';
+			return board;
+		}
+		int dir[8][2] = { {-1,0},{1,0},{0,-1},{0,1},{-1,-1},{-1,1} ,{1,-1} ,{1,1} };
+		int lengthx = board.front().size(), lengthy = board.size();
+		queue<vector<int>> que;
+		que.push(click);
+		while (!que.empty()) {
+			vector<int> temp = que.front();
+			que.pop();
+			int count = 0;
+			for (int k = 0; k < 8; k++) {
+				int y = temp[0] + dir[k][0], x = temp[1] + dir[k][1];
+				if (x >= 0 && x < lengthx&&y >= 0 && y < lengthy) {
+					if (board[y][x] == 'M')
+						count++;
+				}
+			}
+			if (!count) {
+				board[temp[0]][temp[1]] = 'B';
+				for (int i = 0; i < 8; i++) {
+					vector<int> pos;
+					pos.push_back(temp[0] + dir[i][0]), pos.push_back(temp[1] + dir[i][1]);
+					if (pos[1] >= 0 && pos[1] < lengthx&&pos[0] >= 0 &&
+						pos[0] < lengthy&&board[pos[0]][pos[1]] != 'B') {
+						que.push(pos);
+					}
+				}
+			}
+			else {
+				board[temp[0]][temp[1]] = '0' + count;
+			}
+		}
+		return board;
+	}
+};

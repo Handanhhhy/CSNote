@@ -1,0 +1,25 @@
+package Compute;
+
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		final long mod = (long) 1e18;
+		int n = input.nextInt(), k = input.nextInt();
+		long[] dp_x = new long[n + 1], dp_y = new long[n + 1];
+		dp_y[0] = 1;
+		for (int i = 1; i <= k; i++) {
+			for (int j = 1; j <= n; j++) {
+				if (j - i >= 0) {
+					dp_x[j] = (dp_x[j] + dp_x[j - i]) + (dp_y[j] + dp_y[j - i]) / mod;
+					dp_y[j] = (dp_y[j] + dp_y[j - i]) % mod;
+				}
+			}
+		}
+		if (dp_x[n] != 0)
+			System.out.print(dp_x[n]);
+		System.out.print(dp_y[n]);
+
+	}
+}

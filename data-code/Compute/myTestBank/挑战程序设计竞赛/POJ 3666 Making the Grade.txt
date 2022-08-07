@@ -1,0 +1,55 @@
+/*
+**最长上升子序列的升级版;本题重要的一个结论:
+**引理(算法竞赛进阶指南p242)
+**在满足S最小化的前提下，一定存在一种构造序列B的方案，使得B中的数值都在A中出现过。
+**本题还根据n ∈ 1~2000和ai ∈ 1~1000000000，将ai进行离散化(最多只有2000个ai)
+**本题求上升(decrease是扩展)
+*/
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+
+const int MAX_N = 2010, INF = 1E9 + 1;
+
+int n, ans = INF, m;
+int a[MAX_N], b[MAX_N], dp[2][MAX_N];
+void slove() {
+	for (int i = 0; i < m; i++)
+		dp[0][i] = abs(a[0] - b[i]);
+	for (int i = 1; i < n; i++) {
+		int pre_min_cost = dp[(i - 1) & 1][0];;
+		for (int j = 0; j < m; j++) {
+			pre_min_cost = min(pre_min_cost, dp[(i - 1) & 1][j]);
+			dp[i & 1][j] = pre_min_cost + abs(a[i] - b[j]);
+			if (i == n - 1) ans = min(ans, dp[i & 1][j]);
+		}
+	}
+}
+void init_decrease() {
+	memset(dp, 0, sizeof(dp));
+	for (int i = 0, j = m; i < j; i++, j--)
+		swap(b[i], b[j]);
+	m = unique(b, b + n) - b;
+}
+
+int main() {
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		cin >> a[i];
+		b[i] = a[i];
+	}
+	sort(b, b + n);
+	m = unique(b, b + n) - b;
+	slove();
+	init_decrease();
+	slove();
+	cout << ans;
+	return 0;
+}
+=======================================================================
+提供nlogn的做法
+先说操作(以单调非降为例)： 从左到右，把当前位置的数放进大根堆，然后比较这个数和堆顶的大小。
+若比堆顶大，就不管
+若比堆顶小，就把堆顶拿出来变成这个数，然后答案增加堆顶与这个数的差
+=======================================================================

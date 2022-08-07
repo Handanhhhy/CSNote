@@ -1,0 +1,48 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+class Solution {
+	final int INF = 100001;
+
+	public int init(int[][] cost, int V) {
+		int res = 0;
+		int mincost[] = new int[V];
+		boolean used[] = new boolean[V];
+		Arrays.fill(mincost, INF);
+		mincost[0] = 0;
+		while (true) {
+			int v = -1;
+			for (int i = 0; i < V; i++)
+				if (!used[i] && (v == -1 || mincost[i] < mincost[v]))
+					v = i;
+			if (v == -1)
+				break;
+			used[v] = true;
+			res += mincost[v];
+			for (int i = 0; i < V; i++)
+				mincost[i] = Math.min(mincost[i], cost[v][i]);
+
+		}
+		return res;
+	}
+}
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		Solution s = new Solution();
+		int n = input.nextInt();
+		while (n != 0) {
+			int[][] cost = new int[n][n];
+			for (int i = 0; i < n; i++)
+				for (int j = 0; j < n; j++)
+					cost[i][j] = input.nextInt();
+			System.out.println(s.init(cost, n));
+			n = input.nextInt();
+		}
+
+	}
+}

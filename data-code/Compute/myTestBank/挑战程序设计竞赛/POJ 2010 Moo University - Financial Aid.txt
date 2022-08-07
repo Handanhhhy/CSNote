@@ -1,0 +1,66 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Scanner;
+
+class pair {
+	int score, aid, less, greater;
+
+	public pair(int s, int a) {
+		score = s;
+		aid = a;
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int n = input.nextInt(), c = input.nextInt(), f = input.nextInt();
+		pair[] pairs = new pair[c];
+		for (int i = 0; i < c; i++)
+			pairs[i] = new pair(input.nextInt(), input.nextInt());
+		Arrays.sort(pairs, new Comparator<pair>() {// 中位数进行排序
+			@Override
+			public int compare(pair o1, pair o2) {
+				if (o1.score == o2.score)
+					return o1.aid < o2.aid ? -1 : 1;
+				return o1.score < o2.score ? -1 : 1;
+			}
+		});
+		int half = n >> 1;
+		Queue<pair> queue = new PriorityQueue<pair>(half, new Comparator<pair>() {
+			@Override
+			public int compare(pair o1, pair o2) {
+				return o1.aid < o2.aid ? 1 : -1;
+			}
+		});
+		int less = 0, greater = 0, MAX = (Integer.MAX_VALUE >> 1) - 100000;// 防止long和int比较发生错误
+		for (int i = 0; i < c; i++) {// 以每个cow为中位数求小于时的最小花费
+			pairs[i].less = (queue.size() == half) ? less : MAX;
+			queue.offer(pairs[i]);
+			less += pairs[i].aid;
+			if (queue.size() > half)
+				less -= queue.poll().aid;
+
+		}
+		queue.clear();
+		for (int i = c - 1; i >= 0; i--) {// 以每个cow为中位数求大于时的最小花费
+			pairs[i].greater = (queue.size() == half) ? greater : MAX;
+			queue.offer(pairs[i]);
+			greater += pairs[i].aid;
+			if (queue.size() > half)
+				greater -= queue.poll().aid;
+
+		}
+		for (int i = c - 1; i >= 0; i--) {
+			if (pairs[i].less + pairs[i].aid + pairs[i].greater <= f) {
+				System.out.print(pairs[i].score);
+				return;
+			}
+		}
+		System.out.print(-1);
+	}
+}

@@ -1,0 +1,45 @@
+package Compute;
+
+import java.util.Scanner;
+
+class Solution {
+	long factor[] = new long[21];
+
+	Solution() {
+		factor[0] = 1;
+		for (int i = 1; i < 21; i++)
+			factor[i] = factor[i - 1] * i;
+	}
+
+	void solve(int num) {
+		if (num <= 3) {
+			System.out.println(1 + " " + 1);
+			return;
+		}
+		int all = 0;
+		long repeat = 1;
+		for (int i = 2; i * i <= num; i++) {
+			int count = 0;
+			while (num % i == 0) {
+				count++;
+				num /= i;
+			}
+			all += count;
+			repeat *= factor[count];
+		}
+		if (num > 1)
+			all++;
+		System.out.println(all + " " + factor[all] / repeat);
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		Solution solution = new Solution();
+		while (input.hasNextInt()) {
+			int num = input.nextInt();
+			solution.solve(num);
+		}
+	}
+}

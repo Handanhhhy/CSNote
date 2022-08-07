@@ -1,0 +1,92 @@
+package Compute;
+
+import java.util.Scanner;
+
+class pair {
+	int x, y;
+
+	public pair(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+}
+
+class Solution {
+	int[] par, rank;
+	int n, d;
+	pair[] pairs;
+
+	public Solution(pair[] pairs, int n, int d) {
+		this.n = n;
+		this.d = d;
+		this.pairs = pairs;
+		par = new int[n + 1];
+		rank = new int[n + 1];
+	}
+
+	public int find(int x) {
+		if (par[x] == x)
+			return x;
+		return par[x] = find(par[x]);
+	}
+
+	public void unite(int x, int y) {
+		x = find(x);
+		y = find(y);
+		if (x == y)
+			return;
+		if (rank[x] < rank[y])
+			par[x] = y;
+		else {
+			par[y] = x;
+			if (rank[x] == rank[y])
+				rank[x]++;
+		}
+
+	}
+
+	public void repair(int p) {
+		if (par[p] == 0)// 修复电脑
+			par[p] = p;
+		for (int q = 1; q <= n; q++) {
+			if (p == q || par[q] == 0)// 该电脑没有被修复
+				continue;
+			double dis = Math.sqrt((pairs[p].x - pairs[q].x) * (pairs[p].x - pairs[q].x)
+					+ (pairs[p].y - pairs[q].y) * (pairs[p].y - pairs[q].y));
+			if (dis <= d)
+				if (!query(p, q))
+					unite(p, q);
+
+		}
+	}
+
+	public boolean query(int p, int q) {
+		return find(p) == find(q);
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int n = input.nextInt(), d = input.nextInt();
+		pair[] pairs = new pair[n + 1];
+		for (int i = 1; i <= n; i++)
+			pairs[i] = new pair(input.nextInt(), input.nextInt());
+		input.nextLine();
+		Solution s = new Solution(pairs, n, d);
+		while (input.hasNext()) {
+			char in = input.next().charAt(0);
+			int p = input.nextInt();
+			if (in == 'O') {
+				s.repair(p);
+			} else {
+				int q = input.nextInt();
+				if (s.query(p, q))
+					System.out.println("SUCCESS");
+				else
+					System.out.println("FAIL");
+			}
+			input.nextLine();
+		}
+	}
+}

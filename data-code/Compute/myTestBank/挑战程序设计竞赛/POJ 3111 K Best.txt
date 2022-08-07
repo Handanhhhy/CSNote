@@ -1,0 +1,76 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+class pair implements Comparable<pair> {
+	double weight;
+	int code;
+
+	public pair(double w, int c) {
+		weight = w;
+		code = c;
+	}
+
+	@Override
+	public int compareTo(pair o) {
+		return weight > o.weight ? -1 : 1;
+	}
+
+}
+
+class Solution {
+	int len, k;
+	int[] v, w, record;
+
+	public boolean C(double x) {
+		pair[] y = new pair[len];
+		for (int i = 0; i < len; i++) {
+			y[i] = new pair(v[i] - x * w[i], i + 1);
+		}
+		Arrays.sort(y);
+		double sum = 0;
+		for (int i = 0; i < k; i++) {
+			sum += y[i].weight;
+			record[i] = y[i].code;
+		}
+		return sum >= 0;
+	}
+
+	void solve(int[] v, int[] w, int len, int k, double max) {
+		this.v = v;
+		this.w = w;
+		this.len = len;
+		this.k = k;
+		record = new int[k];
+		double lb = 0, up = max;
+		for (int i = 0; i < 50; i++) {
+			double mid = (lb + up) / 2;
+			if (C(mid)) {
+				lb = mid;
+			} else {
+				up = mid;
+			}
+		}
+		for (int i = 0; i < k; i++)
+			System.out.print(record[i] + " ");
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		Solution s = new Solution();
+		int n = input.nextInt(), k = input.nextInt();
+		int[] v = new int[n], w = new int[n];
+		double max = 0.0;
+		for (int i = 0; i < n; i++) {
+			v[i] = input.nextInt();
+			w[i] = input.nextInt();
+			max = Math.max(max, (double) v[i] / w[i]);
+		}
+		s.solve(v, w, n, k, max);
+
+	}
+
+}

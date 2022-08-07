@@ -1,0 +1,44 @@
+package Compute;
+
+import java.util.Scanner;
+
+class Solution {
+	Scanner input = new Scanner(System.in);
+	int n = input.nextInt();
+	double A = input.nextDouble();
+	double ans = Double.MAX_VALUE;
+
+	public boolean C(double mid) {
+		double a = A, b = mid, c = 0.0;
+		for (int i = 2; i < n; i++) {
+			c = 2 * b - a + 2;
+			a = b;
+			b = c;
+			if (c < 0)
+				return false;
+		}
+		ans = Math.min(ans, c);
+		return true;
+	}
+
+	public Solution() {
+		double up = A, lb = 0.0;
+		while (up - lb > 10e-10) {
+			double mid = (up + lb) / 2;
+			if (C(mid)) {
+				up = mid;
+			} else {
+				lb = mid;
+			}
+		}
+		System.out.printf("%.2f", ans);
+	}
+
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Solution s = new Solution();
+	}
+
+}

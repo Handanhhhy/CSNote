@@ -1,0 +1,80 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+class Solution {
+	int len;
+	int[] x;
+	long k;
+
+	public boolean C(int mid) {
+		long count = 0;
+		for (int i = 0; i < len; i++) {
+			count += upper_bound(x, x[i] + mid, 0, len) - i - 1;//减1是因为减去j本身
+		}
+		return count >= k;
+	}
+
+	void solve(int[] x, int len) {
+		this.x = x;
+		this.len = len;
+		k = ((len * (len - 1) >> 1) + 1) >> 1;// 忘记除以2的悲剧
+		int up = x[len - 1] - x[0], lb = 0, ans = 0;
+		while (up >= lb) {
+			int mid = (up + lb) >> 1;
+			if (C(mid)) {
+				ans = mid;
+				up = mid - 1;
+			} else {
+				lb = mid + 1;
+			}
+		}
+		System.out.println(ans);
+	}
+
+	public int upper_bound(int[] a, int key, int l, int r) {
+		int len = r - l, first = l, mid = 0;
+		while (len > 0) {
+			int half = len >> 1;
+			mid = first + half;
+			if (key < a[mid]) {
+				len = half;
+			} else {
+				first = mid + 1;
+				len = len - half - 1;
+			}
+		}
+		return first;
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		Solution s = new Solution();
+		while (input.hasNextInt()) {
+			int n = input.nextInt();
+			int[] x = new int[n];
+			for (int i = 0; i < n; i++)
+				x[i] = input.nextInt();
+			Arrays.sort(x);
+			s.solve(x, n);
+		}
+	}
+
+}
+======================================================================
+对于xi > xj 有: xi - xj <= mid (1 ≤ i , j ≤ N)的个数为k= C(N,2)/2
+得到：xi <= xj + mid 的个数为k
+所以对x数组进行排序 枚举j 在满足 xi > xj 的情况下统计xi小于xj + mid
+======================================================================
+		while (up - lb > 1) {
+			int mid = (up + lb) >> 1;
+			if (C(mid)) {
+				up = mid;
+			} else {
+				lb = mid;
+			}
+		}
+在此种方法下为什么Wrong Answer没有明白

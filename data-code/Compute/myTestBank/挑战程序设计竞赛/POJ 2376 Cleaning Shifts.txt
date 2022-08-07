@@ -1,0 +1,60 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Scanner;
+
+class work {
+	int s, e;
+
+	public work(int _s, int _e) {
+		s = _s;
+		e = _e;
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int n = input.nextInt();
+		int time = input.nextInt();
+		work[] ws = new work[n + 1];
+		for (int i = 0; i < n; i++) {
+			int s = input.nextInt();
+			int e = input.nextInt();
+			ws[i] = new work(s, e);
+		}
+		ws[n] = new work(Integer.MAX_VALUE, Integer.MAX_VALUE);
+		Arrays.sort(ws, new Comparator<work>() {
+			@Override
+			public int compare(work o1, work o2) {
+				if (o1.s == o2.s)
+					return o1.e < o2.e ? -1 : 1;
+				return o1.s < o2.s ? -1 : 1;
+			}
+		});
+
+		System.out.print(solve(ws, n, time));
+
+	}
+
+	public static int solve(work[] w, int n, int T) {
+		if (w[0].s > 1)
+			return -1;
+		int curT = 0, curMT = 0, ans = 0;
+		boolean flag = false;
+		for (int i = 0; i < n; i++) {
+			if (w[i].s <= curT + 1) {// 时间段 1-3 4-5=1-5
+				curMT = Math.max(curMT, w[i].e);
+				if (w[i + 1].s > curT + 1 && flag) {
+					ans++;
+					curT = curMT;
+					flag = false;
+				}
+			}
+		}
+		if (curT >= T)
+			return ans;
+		return -1;
+	}
+}

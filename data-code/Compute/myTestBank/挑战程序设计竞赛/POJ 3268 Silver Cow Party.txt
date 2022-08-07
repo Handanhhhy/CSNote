@@ -1,0 +1,97 @@
+package Compute;
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Scanner;
+import java.util.Vector;
+
+class pair {
+	int cost, v;
+
+	public pair(int c, int _v) {
+		cost = c;
+		v = _v;
+	}
+}
+
+class edge {
+	int to, cost;
+
+	public edge(int t, int c) {
+		to = t;
+		cost = c;
+	}
+}
+
+class Solution {
+	Vector<Vector<edge>> es;
+	int V;
+	int[][] d;
+	final int INF = 999999;
+
+	public int init(Vector<Vector<edge>> edges, int v, int x) {
+		es = edges;
+		V = v;
+		d = new int[v][v];
+		for (int i = 0; i < V; i++)
+			for (int j = 0; j < V; j++)
+				if (i != j)
+					d[i][j] = INF;
+		int ans = 0;
+		for (int i = 0; i < V; i++) {
+			Dijkstra(i);
+		}
+		for (int i = 0; i < V; i++)
+			if (d[x][i] != INF && d[i][x] != INF)
+				ans = Math.max(ans, d[i][x] + d[x][i]);
+
+		return ans;
+	}
+
+	public void Dijkstra(int x) {
+		Queue<pair> queue = new PriorityQueue<pair>(V, new Comparator<pair>() {
+			@Override
+			public int compare(pair o1, pair o2) {
+				return o1.cost < o2.cost ? -1 : 1;
+			}
+
+		});
+		queue.offer(new pair(0, x));
+		d[x][x] = 0;
+
+		while (!queue.isEmpty()) {
+			pair p = queue.poll();
+			if (d[x][p.v] < p.cost)
+				continue;
+			for (edge e : es.get(p.v)) {
+				int cost = p.cost + e.cost;
+				if (d[x][e.to] > cost) {
+					int temp = cost;
+					cost = d[x][e.to];
+					d[x][e.to] = temp;
+					queue.offer(new pair(temp, e.to));
+				}
+			}
+		}
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		Solution solution = new Solution();
+
+		int n = input.nextInt(), m = input.nextInt(), x = input.nextInt() - 1;
+		Vector<Vector<edge>> es = new Vector<Vector<edge>>();
+		for (int i = 0; i < n; i++)
+			es.add(new Vector<edge>());
+		for (int i = 0; i < m; i++) {
+			int S = input.nextInt() - 1, E = input.nextInt() - 1, T = input.nextInt();
+			es.get(S).add(new edge(E, T));
+		}
+
+		System.out.println(solution.init(es, n, x));
+
+	}
+}

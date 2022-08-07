@@ -1,0 +1,37 @@
+#include<iostream>
+#include<string>
+#include<cstring>
+using namespace std;
+
+int main() {
+	int a[2001], b[2001],c[20001], len;
+	memset(a, 0, sizeof(a));
+	memset(b, 0, sizeof(b));
+	memset(c, 0, sizeof(c));
+	string one, two;
+	cin >> one >> two;
+	a[0] = one.length();
+	b[0] = two.length();
+	len = a[0] + b[0];
+	for (int i = 1; i <= a[0]; i++) {
+		a[i] = one[a[0] - i] - '0';
+	}
+	for (int i = 1; i <= b[0]; i++) {
+		b[i] = two[b[0] - i] - '0';
+	}
+	for (int i = 1; i <= a[0]; i++) {
+		for (int j = 1; j <= b[0]; j++) {
+			c[i + j - 1] += (a[i] * b[j]);
+			c[i + j] += c[i + j - 1] / 10;
+			c[i + j - 1] %= 10;
+		}
+	}
+	while (c[len] == 0 && len > 1) {
+		len--;
+	}
+	c[0] = len;
+	for (int i = len; i > 0; i--) {
+		cout << c[i];
+	}
+	return 0;
+}

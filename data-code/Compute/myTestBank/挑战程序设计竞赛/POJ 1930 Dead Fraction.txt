@@ -1,0 +1,57 @@
+package Compute;
+
+import java.util.Scanner;
+
+class Solution {
+	long gcd(long a, long b) {
+		if (b == 0)
+			return a;
+		return gcd(b, a % b);
+	}
+
+	long ten_pow(int k) {
+		long res = 1;
+		while ((k--) > 0)
+			res *= 10;
+		return res;
+	}
+
+	void solve(String string) {
+		String s = string.substring(2, string.length() - 3);
+		long num = Long.parseLong(s);
+		int end = s.length();
+		long min_y = Long.MAX_VALUE, min_x = 0;
+		//由于题目没说从何处开始循环 所以暴力枚举
+		for (int i = 1; i <= end; i++) {
+			String temp = s.substring(0, end - i);
+			if (end - i == 0)
+				temp = "0";
+			long x = Long.parseLong(temp);
+			long y = ten_pow(end) - ten_pow(end - i);
+			x = num - x;
+			long d = gcd(x, y);
+			x /= d;
+			y /= d;
+			if (y < min_y) {
+				min_x = x;
+				min_y = y;
+			}
+		}
+		System.out.println(min_x + "/" + min_y);
+	}
+
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		Solution solution = new Solution();
+		String s = null;
+		while (true) {
+			s = input.nextLine();
+			if (s.equals("0"))
+				break;
+			solution.solve(s);
+		}
+	}
+}

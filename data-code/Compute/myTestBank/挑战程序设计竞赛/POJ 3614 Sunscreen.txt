@@ -1,0 +1,103 @@
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Scanner;
+
+class range {
+	int a, b;
+
+	public range(int a, int b) {
+		this.a = a;
+		this.b = b;
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int C = input.nextInt(), L = input.nextInt();
+		range[] cows = new range[C];
+		range[] sun = new range[L];
+		for (int i = 0; i < C; i++)
+			cows[i] = new range(input.nextInt(), input.nextInt());
+		for (int i = 0; i < L; i++)
+			sun[i] = new range(input.nextInt(), input.nextInt());
+		Arrays.sort(cows, new Comparator<range>() {
+			@Override
+			public int compare(range o1, range o2) {
+				if (o1.b == o2.b)
+					return o1.a < o2.a ? -1 : 1;
+				return o1.b < o2.b ? -1 : 1;
+			}
+		});
+		Arrays.sort(sun, new Comparator<range>() {
+			@Override
+			public int compare(range o1, range o2) {
+				return o1.a < o2.a ? -1 : 1;
+			}
+		});
+		int ans = 0;
+		for (int i = 0; i < C; i++) {
+			for (int j = 0; j < L; j++) {
+				if (cows[i].a <= sun[j].a && cows[i].b >= sun[j].a && sun[j].b > 0) {
+					ans++;
+					sun[j].b--;
+					break;
+				}
+			}
+		}
+		System.out.print(ans);
+
+	}
+}
+=========================================================
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Scanner;
+
+class range {
+	int a, b;
+
+	public range(int a, int b) {
+		this.a = a;
+		this.b = b;
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int C = input.nextInt(), L = input.nextInt();
+		range[] cows = new range[C];
+		range[] sun = new range[L];
+		for (int i = 0; i < C; i++)
+			cows[i] = new range(input.nextInt(), input.nextInt());
+		for (int i = 0; i < L; i++)
+			sun[i] = new range(input.nextInt(), input.nextInt());
+		Comparator<range> cmp = new Comparator<range>() {
+			@Override
+			public int compare(range o1, range o2) {
+				if (o1.a == o2.a)
+					return o1.b < o2.b ? -1 : 1;
+				return o1.a < o2.a ? -1 : 1;
+			}
+		};
+		Arrays.sort(cows, cmp);
+		Arrays.sort(sun, cmp);
+		int ans = 0, cur = 0;
+		Queue<Integer> queue = new PriorityQueue<Integer>(C);
+		for (int i = 0; i < L; i++) {
+			while (cur < C && cows[cur].a <= sun[i].a)
+				queue.offer(cows[cur++].b);
+			while (!queue.isEmpty() && sun[i].b > 0) {
+				if (queue.poll() >= sun[i].a) {
+					ans++;
+					sun[i].b--;
+				}
+			}
+		}
+		System.out.print(ans);
+
+	}
+}

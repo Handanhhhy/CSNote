@@ -1,0 +1,48 @@
+package Compute;
+
+import java.util.Scanner;
+
+class Solution {
+	public boolean is_prime(long p) {
+		for (long i = 2; i * i <= p; i++)
+			if (p % i == 0)
+				return false;
+		return p != 1;
+	}
+
+	public long pow(long a, long b, long mod) {
+		long res = 1;
+		while (b > 0) {
+			if ((b & 1) == 1)
+				res = res * a % mod;
+			a = a * a % mod;
+			b >>= 1;
+		}
+		return res;
+	}
+
+	public boolean solve(long a, long p) {
+		return pow(a, p, p) == (a % p);
+	}
+}
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		Solution s = new Solution();
+		long p = in.nextLong(), a = in.nextLong();
+		while (p != 0 && a != 0) {
+			if (s.is_prime(p)) {
+				System.out.println("no");
+			} else {// 伪素数不是素数但满足费马小定理
+				if (s.solve(a, p))
+					System.out.println("yes");
+				else
+					System.out.println("no");
+			}
+			p = in.nextLong();
+			a = in.nextLong();
+		}
+	}
+}

@@ -1,0 +1,58 @@
+package Compute;
+
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int n = input.nextInt(), w = input.nextInt();
+		int apple[][] = new int[n + 1][2];
+		for (int i = 0; i < n; i++) {
+			int which = input.nextInt();
+			apple[i][which - 1] = 1;
+		}
+
+		int dp[][] = new int[n + 1][w + 1];
+		for (int i = 1; i <= n; i++) {// 如果+apple[i-1][1]呢？由题意起始与位置无关
+			dp[i][0] = dp[i - 1][0] + apple[i - 1][0];// 当前tree不移动=前一次不移动+当前苹果树下
+			for (int j = 1; j <= w; j++) {
+				dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - 1]) + apple[i - 1][j % 2];
+			}
+		}
+		int ans = 0;
+		for (int i = 1; i <= w; i++)
+			ans = Math.max(ans, dp[n][w]);
+		System.out.print(ans);
+
+	}
+
+}
+=========================================
+import java.util.Scanner;
+//1313MS
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int n = input.nextInt(), w = input.nextInt();
+		int apple[][] = new int[n + 1][2];
+		for (int i = 0; i < n; i++) {
+			int which = input.nextInt();
+			apple[i][which - 1] = 1;
+		}
+
+		int dp[][] = new int[n + 1][w + 1];
+		for (int i = 1; i <= n; i++) {
+			for (int j = 0; j <= w; j++) {
+				dp[i][j] = dp[i - 1][j] + apple[i - 1][j % 2];
+				if (j > 0)
+					dp[i][j] = Math.max(dp[i][j], dp[i - 1][j - 1] + apple[i][j % 2]);
+			}
+		}
+		int ans = 0;
+		for (int i = 1; i <= w; i++)
+			ans = Math.max(ans, dp[n][w]);
+		System.out.print(ans);
+
+	}
+
+}

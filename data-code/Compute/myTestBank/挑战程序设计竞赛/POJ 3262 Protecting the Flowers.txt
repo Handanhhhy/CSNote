@@ -1,0 +1,36 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Scanner;
+
+class pair {
+	int t, d;
+
+	public pair(int t, int d) {
+		this.t = t;
+		this.d = d;
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		int n = input.nextInt();
+		pair[] cows = new pair[n];
+		for (int i = 0; i < n; i++)
+			cows[i] = new pair(input.nextInt(), input.nextInt());
+		Arrays.sort(cows, new Comparator<pair>() {
+			@Override
+			public int compare(pair o1, pair o2) {// (a,b) (c,d)-->min(ad,cb);
+				return o1.t * o2.d < o2.t * o1.d ? -1 : 1;
+			}
+		});
+		long ans = 0, wait = cows[0].t * 2;
+		for (int i = 1; i < n; i++) {
+			ans += wait * cows[i].d;
+			wait += cows[i].t * 2;
+		}
+		System.out.print(ans);
+	}
+}

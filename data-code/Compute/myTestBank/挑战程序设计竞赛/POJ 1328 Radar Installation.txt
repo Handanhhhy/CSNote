@@ -1,0 +1,73 @@
+package Compute;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Scanner;
+
+class pos {
+	double l, r;
+
+	public pos(double left, double right) {
+		l = left;
+		r = right;
+	}
+}
+
+class Solution {
+	pos[] p;
+	int d, n;
+	Comparator<pos> cmp = new Comparator<pos>() {
+		@Override
+		public int compare(pos o1, pos o2) {
+			return o1.l < o2.l ? -1 : 1;
+		}
+	};
+
+	public void init(pos[] _p, int _d, int _n) {
+		p = _p;
+		d = _d;
+		n = _n;
+	}
+
+	public int solve() {
+
+		Arrays.sort(p, cmp);
+		int ans = 1;//初始选择为1
+		pos temp = p[0];
+		for (int i = 1; i < n; i++) {
+			if (p[i].l > temp.r) {
+				ans++;
+				temp = p[i];
+			} else if (p[i].r < temp.r) {
+				temp = p[i];// y最大但是与temp在同一园中
+			}
+		}
+		return ans;
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		Solution s = new Solution();
+		int n = input.nextInt(), d = input.nextInt();
+		for (int k = 1; n != 0 && d != 0; k++) {
+			pos[] p = new pos[n];
+			boolean flag = false;
+			for (int i = 0; i < n; i++) {
+				int x = input.nextInt(), y = input.nextInt();
+				if (y > d || y < -d)
+					flag = true;
+				p[i] = new pos(x - Math.sqrt(d * d - y * y), x + Math.sqrt(d * d - y * y));
+			}
+			s.init(p, d, n);
+			if (flag)
+				System.out.println("Case " + k + ": -1");
+			else
+				System.out.println("Case " + k + ": " + s.solve());
+			n = input.nextInt();
+			d = input.nextInt();
+		}
+	}
+
+}
